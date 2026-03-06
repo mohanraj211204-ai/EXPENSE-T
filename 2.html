@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Expense Tracker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<style>
+
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body{
+margin:0;
+font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background: #000000;
+background: url('e545228a8391f37dba1353eefb727f7c.jpg') no-repeat center center/cover;
+}
+
+.card{
+width:100%;
+max-width:400px;
+height:100vh;
+max-height:900px;
+padding:30px 25px;
+background: #0a0a0a;
+background:transparent;
+color:#ffffff;
+text-align:center;
+border-radius:0;
+box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.05);
+overflow-y:auto;
+scrollbar-width: none;
+-ms-overflow-style: none;
+border-left: 1px solid rgba(255,255,255,0.03);
+border-right: 1px solid rgba(255,255,255,0.03);
+}
+
+.card::-webkit-scrollbar {
+display: none;
+}
+
+h1{
+letter-spacing:3px;
+font-size:28px;
+font-weight:500;
+margin-bottom:20px;
+color:#ffffff;
+border-bottom:1px solid rgba(255,255,255,0.1);
+padding-bottom:15px;
+text-transform:uppercase;
+font-weight:300;
+text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+h2{
+font-size:16px;
+margin:20px 0 10px;
+color:#a0a0a0;
+font-weight:400;
+text-align:left;
+letter-spacing:1px;
+text-transform:uppercase;
+}
+
+.balance{
+font-size:40px;
+font-weight:300;
+margin:20px 0;
+color:#ffffff;
+background: transparent;
+padding:20px;
+border-radius:25px;
+border: 1px solid rgba(255,255,255,0.1);
+box-shadow: inset 0 4px 6px rgba(0,0,0,0.5), 0 10px 20px rgba(0,0,0,0.5);
+letter-spacing:1px;
+}
+
+.balance span {
+font-weight:600;
+color: #d4af37;
+}
+
+.datetime {
+background: transparent;
+padding:12px 15px;
+border-radius:20px;
+margin:10px 0;
+font-size:14px;
+color:#b0b0b0;
+display:flex;
+justify-content:space-between;
+border: 1px solid rgba(255,255,255,0.05);
+backdrop-filter:blur(10px);
+letter-spacing:0.5px;
+}
+
+.datetime span {
+color: #ffffff;
+font-weight:500;
+}
+
+.week-info {
+background: transparent;
+padding:10px;
+border-radius:15px;
+margin:15px 0;
+font-size:14px;
+color: #d4af37;
+border: 1px solid rgba(212,175,55,0.3);
+display:flex;
+justify-content:space-between;
+}
+
+.week-info span {
+color: #ffffff;
+font-weight:600;
+}
+
+input{
+padding:16px 18px;
+border:1px solid rgba(255,255,255,0.1);
+border-radius:18px;
+margin:6px 0;
+width:100%;
+text-align:left;
+font-size:15px;
+background: transparent;
+color:#ffffff;
+transition: all 0.3s;
+box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+}
+
+input:focus {
+outline: none;
+border-color: #d4af37;
+background: transparent;
+box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), 0 0 0 2px rgba(212, 175, 55, 0.2);
+}
+
+input::placeholder {
+color: #4a4a4a;
+font-weight:300;
+font-style:italic;
+}
+
+.full{
+width:100%;
+}
+
+button{
+width:100%;
+padding:16px;
+border:none;
+border-radius:18px;
+margin:8px 0;
+font-size:15px;
+font-weight:500;
+cursor:pointer;
+transition: all 0.3s;
+letter-spacing:0.5px;
+text-transform:uppercase;
+position:relative;
+overflow:hidden;
+}
+
+button:before {
+content: '';
+position:absolute;
+top:0;
+left:-100%;
+width:100%;
+height:100%;
+background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+transition: left 0.5s;
+}
+
+button:hover:before {
+left:100%;
+}
+
+button:active {
+transform: scale(0.97);
+}
+
+.income-btn{
+background: transparent;
+color: #d4af37;
+border: 1px solid #d4af37;
+box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
+}
+
+.expense-btn{
+background: transparent;
+color: #ff6b6b;
+border: 1px solid #ff6b6b;
+box-shadow: 0 4px 15px rgba(255, 107, 107, 0.15);
+}
+
+.download-btn{
+background: transparent;
+color: #6b8cff;
+border: 1px solid #6b8cff;
+box-shadow: 0 4px 15px rgba(107, 140, 255, 0.15);
+}
+
+.delete-btn{
+background: transparent;
+color: #ff8c6b;
+border: 1px solid #ff8c6b;
+box-shadow: 0 4px 15px rgba(255, 140, 107, 0.15);
+}
+
+.new-week-btn{
+background: transparent;
+color: #d4af37;
+border: 1px solid #d4af37;
+box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
+margin-top: 15px;
+}
+
+.section-title {
+display:flex;
+align-items:center;
+margin:20px 0 10px;
+}
+
+.section-title span {
+color:#d4af37;
+width:30px;
+height:30px;
+border-radius:10px;
+display:inline-flex;
+align-items:center;
+justify-content:center;
+margin-right:10px;
+font-size:18px;
+filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+/* Custom scrollbar */
+.card {
+scrollbar-width: thin;
+scrollbar-color: #2a2a2a #0a0a0a;
+}
+
+.card::-webkit-scrollbar {
+width: 3px;
+display:block;
+}
+
+.card::-webkit-scrollbar-track {
+background: #0a0a0a;
+}
+
+.card::-webkit-scrollbar-thumb {
+background-color: #2a2a2a;
+border-radius: 20px;
+}
+
+/* Glass effect for sections */
+.glass-section {
+background: rgba(15,15,15,0.7);
+border-radius:25px;
+padding:5px 15px 15px 15px;
+margin:15px 0;
+border: 1px solid rgba(255,255,255,0.03);
+backdrop-filter: blur(5px);
+}
+
+/* Elegant divider */
+.divider {
+height:1px;
+background: linear-gradient(90deg, transparent, rgba(212,175,55,0.3), rgba(212,175,55,0.5), rgba(212,175,55,0.3), transparent);
+margin:20px 0;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>EXPENSE TRACKER</h1>
+
+<div class="datetime">
+<span>📅 <span id="date"></span></span>
+<span>⏰ <span id="time"></span></span>
+</div>
+
+<div class="week-info">
+<span>Entries: <span id="entryCount">0</span></span>
+</div>
+
+<div class="balance">
+₹<span id="totalBalance">0</span>
+</div>
+
+<div class="divider"></div>
+
+<div class="section-title">
+<span>💰</span>
+<h2>ADD INCOME</h2>
+</div>
+
+<div class="glass-section">
+<input class="full" type="text" id="incomeName" placeholder="Income source (e.g., Salary)">
+<input class="full" type="number" id="incomeAmount" placeholder="Amount (₹)">
+
+<button class="income-btn" onclick="saveIncome()">➕ Add Income</button>
+</div>
+
+<div class="section-title">
+<span>📝</span>
+<h2>ADD EXPENSE</h2>
+</div>
+
+<div class="glass-section">
+<input class="full" type="text" id="expenseName" placeholder="Expense item (e.g., Groceries)">
+<input class="full" type="number" id="expenseAmount" placeholder="Amount (₹)">
+
+<button class="expense-btn" onclick="saveExpense()">💸 Add Expense</button>
+</div>
+
+<div class="glass-section">
+<button class="download-btn" onclick="downloadWeeklyExcel()">📥 Download This Week's Excel</button>
+<button class="new-week-btn" onclick="startNewWeek()">🔄 Start New Week (Clear Data)</button>
+<button class="delete-btn" onclick="deleteAllData()">🗑️ Delete All Data</button>
+</div>
+
+</div>
+
+<script>
+
+let records = [];
+let totalBalance = 0;
+
+function updateTime(){
+
+let now=new Date();
+
+const options = { 
+year: 'numeric', 
+month: 'short', 
+day: 'numeric' 
+};
+
+document.getElementById("date").innerText=
+now.toLocaleDateString('en-US', options);
+
+// Fix time display - show only time without date
+let hours = now.getHours();
+let minutes = now.getMinutes();
+let seconds = now.getSeconds();
+let ampm = hours >= 12 ? 'PM' : 'AM';
+hours = hours % 12;
+hours = hours ? hours : 12; // the hour '0' should be '12'
+let timeStr = hours + ':' + 
+              (minutes < 10 ? '0' + minutes : minutes) + ':' + 
+              (seconds < 10 ? '0' + seconds : seconds) + ' ' + ampm;
+
+document.getElementById("time").innerText = timeStr;
+
+updateWeekNumber();
+
+}
+
+function updateWeekNumber() {
+let now = new Date();
+let startOfYear = new Date(now.getFullYear(), 0, 1);
+let days = Math.floor((now - startOfYear) / (24 * 60 * 60 * 1000));
+let weekNumber = Math.ceil((days + startOfYear.getDay() + 1) / 7);
+document.getElementById("weekNumber").innerText = weekNumber;
+}
+
+function updateEntryCount() {
+document.getElementById("entryCount").innerText = records.length;
+}
+
+setInterval(updateTime,1000);
+
+function updateBalanceDisplay(){
+document.getElementById("totalBalance").innerText = totalBalance.toLocaleString('en-IN');
+}
+
+function saveIncome(){
+
+let date=document.getElementById("date").innerText;
+let time=document.getElementById("time").innerText;
+let source=document.getElementById("incomeName").value;
+let amount=Number(document.getElementById("incomeAmount").value)||0;
+
+if(source === "" || amount === 0){
+alert("Please enter income source and amount");
+return;
+}
+
+totalBalance += amount;
+
+// Add to records with type "INCOME"
+records.push({
+    date: date,
+    time: time,
+    type: "INCOME",
+    description: source,
+    amount: amount
+});
+
+alert("Income Added: ₹" + amount.toLocaleString('en-IN'));
+updateBalanceDisplay();
+updateEntryCount();
+
+// Clear input fields - refreshed for next entry
+document.getElementById("incomeName").value = "";
+document.getElementById("incomeAmount").value = "";
+
+}
+
+function saveExpense(){
+
+let date=document.getElementById("date").innerText;
+let time=document.getElementById("time").innerText;
+let expenseName=document.getElementById("expenseName").value;
+let amount=Number(document.getElementById("expenseAmount").value)||0;
+
+if(expenseName === "" || amount === 0){
+alert("Please enter expense item and amount");
+return;
+}
+
+// Check if enough balance
+if(amount > totalBalance) {
+alert("Insufficient balance! Required: ₹" + amount.toLocaleString('en-IN') + ", Available: ₹" + totalBalance.toLocaleString('en-IN'));
+return;
+}
+
+totalBalance -= amount;
+
+// Add individual expense to records
+records.push({
+    date: date,
+    time: time,
+    type: "EXPENSE",
+    description: expenseName,
+    amount: amount
+});
+
+alert("Expense saved: ₹" + amount.toLocaleString('en-IN'));
+updateBalanceDisplay();
+updateEntryCount();
+
+// Clear input fields - refreshed for next entry
+document.getElementById("expenseName").value = "";
+document.getElementById("expenseAmount").value = "";
+
+}
+
+function downloadWeeklyExcel(){
+
+if(records.length === 0){
+alert("No data to download this week");
+return;
+}
+
+// Get current week info
+let now = new Date();
+let weekNumber = document.getElementById("weekNumber").innerText;
+let year = now.getFullYear();
+
+// Calculate totals
+let totalIncome = 0;
+let totalExpense = 0;
+
+records.forEach(record => {
+    if(record.type === "INCOME") {
+        totalIncome += record.amount;
+    } else {
+        totalExpense += record.amount;
+    }
+});
+
+// Create CSV content with proper formatting - fixed for Excel
+let csv = "WEEK " + weekNumber + " - " + year + " EXPENSE REPORT\n";
+csv += "\n";
+csv += "Date,Time,Type,Description,Amount (₹)\n";
+
+records.forEach(record => {
+    // Escape commas in description if any
+    let description = record.description.replace(/,/g, ' ');
+    csv += record.date + "," + 
+           record.time + "," + 
+           record.type + "," + 
+           description + "," + 
+           record.amount + "\n";
+});
+
+// Add summary with proper formatting
+csv += "\n";
+csv += "SUMMARY\n";
+csv += "Total Income,," + totalIncome + "\n";
+csv += "Total Expenses,," + totalExpense + "\n";
+csv += "Final Balance,," + totalBalance + "\n";
+csv += "\n";
+csv += "Opening Balance,0\n";
+csv += "Net Change," + (totalIncome - totalExpense) + "\n";
+
+let blob = new Blob([csv], {type: "text/csv;charset=utf-8;"});
+let url = URL.createObjectURL(blob);
+
+let a = document.createElement("a");
+a.href = url;
+a.download = "week_" + weekNumber + "_" + year + "_expenses.csv";
+a.click();
+
+alert("Week " + weekNumber + " report downloaded!");
+
+}
+
+function startNewWeek() {
+
+if(records.length === 0 && totalBalance === 0){
+alert("No data to clear. Starting fresh week!");
+return;
+}
+
+if(confirm("Do you want to download this week's data before starting new week?")) {
+downloadWeeklyExcel();
+}
+
+if(confirm("Are you sure you want to start a new week? This will clear all current entries but keep the balance.")){
+// Save current balance as opening balance for next week
+let openingBalance = totalBalance;
+records = [];
+totalBalance = openingBalance; // Keep the balance for next week
+updateBalanceDisplay();
+updateEntryCount();
+alert("New week started! Opening balance: ₹" + openingBalance.toLocaleString('en-IN'));
+}
+
+}
+
+function deleteAllData(){
+
+if(records.length === 0 && totalBalance === 0){
+alert("No data to delete");
+return;
+}
+
+if(confirm("Are you sure you want to delete ALL data? This cannot be undone!")){
+records = [];
+totalBalance = 0;
+updateBalanceDisplay();
+updateEntryCount();
+alert("All data deleted successfully");
+}
+
+}
+
+// Initialize
+updateTime();
+updateEntryCount();
+
+</script>
+
+</body>
+</html>
